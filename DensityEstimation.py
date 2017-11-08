@@ -15,6 +15,117 @@ data = pd.read_csv('shanghai.csv')
 length=len(data)
 k=pd.Series(length)
 q=np.zeros(2400)
+minutereg=np.zeros(length)
+for i in range(0,length):
+    minutereg[i]=k[i]-((k[i]/100)*40)
+
+kde = KernelDensity(bandwidth=40.0, kernel='gaussian')
+kde.fit(minutereg[:, None])
+
+# score_samples returns the log of the probability density
+logprob = kde.score_samples(x_d[:, None])
+
+plt.fill_between(x_d, np.exp(logprob), alpha=0.5)
+plt.plot(minutereg, np.full_like(minutereg, -0.01), '|k', markeredgewidth=1)
+plt.ylim(0, 0.003)
+
+
+kde = KernelDensity(bandwidth=40.0, kernel='tophat')
+kde.fit(minutereg[:, None])
+
+# score_samples returns the log of the probability density
+logprob = kde.score_samples(x_d[:, None])
+
+plt.fill_between(x_d, np.exp(logprob), alpha=0.5)
+plt.plot(minutereg, np.full_like(minutereg, -0.01), '|k', markeredgewidth=1)
+plt.ylim(0, 0.003)
+
+kde = KernelDensity(bandwidth=40.0, kernel='epanechnikov')
+kde.fit(minutereg[:, None])
+
+# score_samples returns the log of the probability density
+logprob = kde.score_samples(x_d[:, None])
+
+plt.fill_between(x_d, np.exp(logprob), alpha=0.5)
+plt.plot(minutereg, np.full_like(minutereg, -0.01), '|k', markeredgewidth=1)
+plt.ylim(0, 0.003)
+kde = KernelDensity(bandwidth=40.0, kernel='exponential')
+kde.fit(minutereg[:, None])
+
+# score_samples returns the log of the probability density
+logprob = kde.score_samples(x_d[:, None])
+
+plt.fill_between(x_d, np.exp(logprob), alpha=0.5)
+plt.plot(minutereg, np.full_like(minutereg, -0.01), '|k', markeredgewidth=1)
+plt.ylim(0, 0.003)
+kde = KernelDensity(bandwidth=40.0, kernel='linear')
+kde.fit(minutereg[:, None])
+
+# score_samples returns the log of the probability density
+logprob = kde.score_samples(x_d[:, None])
+
+plt.fill_between(x_d, np.exp(logprob), alpha=0.5)
+plt.plot(minutereg, np.full_like(minutereg, -0.01), '|k', markeredgewidth=1)
+plt.ylim(0, 0.003)
+kde = KernelDensity(bandwidth=40.0, kernel='cosine')
+kde.fit(minutereg[:, None])
+
+# score_samples returns the log of the probability density
+logprob = kde.score_samples(x_d[:, None])
+
+plt.fill_between(x_d, np.exp(logprob), alpha=0.5)
+plt.plot(minutereg, np.full_like(minutereg, -0.01), '|k', markeredgewidth=1)
+plt.ylim(0, 0.003)
+hist = plt.hist(minutereg, bins=80, normed=True)
+density, bins, patches = hist
+widths = bins[1:] - bins[:-1]
+
+'''
+hist = plt.hist(minutereg, bins=80, normed=True)
+density, bins, patches = hist
+widths = bins[1:] - bins[:-1]
+kde = KernelDensity(bandwidth=20.0, kernel='gaussian')
+kde.fit(minutereg[:, None])
+x_d = np.linspace(0, 1440, 1440)
+# score_samples returns the log of the probability density
+logprob = kde.score_samples(x_d[:, None])
+
+density = sum(norm(xi).pdf(x_d) for xi in minutereg)
+
+plt.fill_between(x_d, density, alpha=0.5)
+plt.plot(minutereg, np.full_like(minutereg, -0.1), '|k', markeredgewidth=1)
+
+plt.axis([0, 1440, -0.2, 200]);
+
+
+plt.fill_between(x_d, np.exp(logprob), alpha=0.5)
+plt.plot(minutereg, np.full_like(x, 10), '|k', markeredgewidth=1)
+plt.ylim(0, 0.003)
+
+from sklearn.neighbors import KernelDensity
+
+# instantiate and fit the KDE model
+kde = KernelDensity(bandwidth=20.0, kernel='gaussian')
+kde.fit(minutereg[:, None])
+x_d = np.linspace(0, 1440, 1440)
+
+# score_samples returns the log of the probability density
+logprob = kde.score_samples(x_d[:, None])
+
+plt.fill_between(x_d, np.exp(logprob), alpha=20)
+plt.plot(minutereg, np.full_like(minutereg, -0.01), '|k', markeredgewidth=1)
+plt.ylim(-0.02, 0.22)
+
+from scipy.stats import norm
+x_d = np.linspace(0, 1440, 1440)
+density = sum(norm(xi).pdf(x_d) for xi in minutereg)
+
+plt.fill_between(x_d, density, alpha=0.5)
+plt.plot(k, np.full_like(k, -0.1), '|k', markeredgewidth=10)
+
+plt.axis([-100, 1500, -0.2, 200]);
+'''
+
 oneMiniteWindow=np.zeros(24*60)
 fiveMinutesWindow=np.zeros(24*60/5)
 fiveMinutesSlidingWindow=np.zeros(24*60-4)
@@ -42,19 +153,22 @@ for i in range(0,24*60-9):
     tenMinutesSlidingWindow[i]=oneMiniteWindow[i]+oneMiniteWindow[i+1]+oneMiniteWindow[i+2]+oneMiniteWindow[i+3]+oneMiniteWindow[i+4]+oneMiniteWindow[i+5]+oneMiniteWindow[i+6]+oneMiniteWindow[i+7]+oneMiniteWindow[i+8]+oneMiniteWindow[i+9]
 
     
-    
-      
-    
+
 '''    
+
+
+X=k
+X=X.reshape(-1,1)
+X_plot=np.linspace(0, 2400, 2400)[:, np.newaxis]
+hist = plt.hist(k, bins=20, normed=True)
+
     
 #----------------------------------------------------------------------
 # Plot the progression of histograms to kernels
 np.random.seed(1)
 
-X = np.concatenate((np.random.normal(0, 1, int(0.3 * N)),
-                    np.random.normal(5, 1, int(0.7 * N))))[:, np.newaxis]
-X_plot = np.linspace(-5, 10, 1000)[:, np.newaxis]
-bins = np.linspace(-5, 10, 10)
+X_plot=np.linspace(0, 2400, 1)[:, np.newaxis]
+
 
 fig, ax = plt.subplots(2, 2, sharex=True, sharey=True)
 fig.subplots_adjust(hspace=0.05, wspace=0.05)
