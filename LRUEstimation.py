@@ -14,6 +14,7 @@ import random
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+mu,sigma=0,0.00001
 
 '''def readFile():'''
 data = pd.read_csv('individualAnomaly2.csv')
@@ -57,8 +58,8 @@ for start in range(0,length-window+1):
     for os in data['OPERATING_SYSTEM'][start:start+window]:
         osCountWindow[os]=osCountWindow.get(os,0.0)+1.0
     osCountLRU=osCountWindow.copy()
-    for i in range(0,window):
-        osCountLRU[data['OPERATING_SYSTEM'][i]]=osCountLRU[data['OPERATING_SYSTEM'][i]]-recent[i]
+    for i in range(start,start+window):
+        osCountLRU[data['OPERATING_SYSTEM'][i]]=osCountLRU[data['OPERATING_SYSTEM'][i]]-recent[i-start]
     osLRUlen=len(osCountLRU)
     osLRUlist=list(osCountLRU)
     sum=0
@@ -95,8 +96,8 @@ for start in range(0,length-window+1):
     for dt in data['DEVICE_TYPE'][start:start+window]:
         dtCountWindow[dt]=dtCountWindow.get(dt,0.0)+1.0
     dtCountLRU=dtCountWindow.copy()
-    for i in range(0,window):
-        dtCountLRU[data['DEVICE_TYPE'][i]]=dtCountLRU[data['DEVICE_TYPE'][i]]-recent[i]
+    for i in range(start,start+window):
+        dtCountLRU[data['DEVICE_TYPE'][i]]=dtCountLRU[data['DEVICE_TYPE'][i]]-recent[i-start]
     dtLRUlen=len(dtCountLRU)
     dtLRUlist=list(dtCountLRU)
     sum=0
@@ -126,8 +127,8 @@ for start in range(0,length-window+1):
     for bc in data['BROWSER'][start:start+window]:
         bcCountWindow[bc]=bcCountWindow.get(bc,0.0)+1.0
     bcCountLRU=bcCountWindow.copy()
-    for i in range(0,window):
-        bcCountLRU[data['BROWSER'][i]]=bcCountLRU[data['BROWSER'][i]]-recent[i]
+    for i in range(start,start+window):
+        bcCountLRU[data['BROWSER'][i]]=bcCountLRU[data['BROWSER'][i]]-recent[i-start]
     bcLRUlen=len(bcCountLRU)
     bcLRUlist=list(bcCountLRU)
     sum=0
@@ -157,8 +158,8 @@ for start in range(0,length-window+1):
     for ct in data['client_connectionType'][start:start+window]:
         ctCountWindow[ct]=ctCountWindow.get(ct,0.0)+1.0
     ctCountLRU=ctCountWindow.copy()
-    for i in range(0,window):
-        ctCountLRU[data['client_connectionType'][i]]=ctCountLRU[data['client_connectionType'][i]]-recent[i]
+    for i in range(start,start+window):
+        ctCountLRU[data['client_connectionType'][i]]=ctCountLRU[data['client_connectionType'][i]]-recent[i-start]
     ctLRUlen=len(ctCountLRU)
     ctLRUlist=list(ctCountLRU)
     sum=0
@@ -189,8 +190,8 @@ for start in range(0,length-window+1):
     for ac in data['APPLICATION_NAME'][start:start+window]:
         acCountWindow[ac]=acCountWindow.get(ac,0.0)+1.0
     acCountLRU=acCountWindow.copy()
-    for i in range(0,window):
-        acCountLRU[data['APPLICATION_NAME'][i]]=acCountLRU[data['APPLICATION_NAME'][i]]-recent[i]
+    for i in range(start,start+window):
+        acCountLRU[data['APPLICATION_NAME'][i]]=acCountLRU[data['APPLICATION_NAME'][i]]-recent[i-start]
     acLRUlen=len(acCountLRU)
     acLRUlist=list(acCountLRU)
     sum=0
@@ -220,8 +221,8 @@ for start in range(0,length-window+1):
     for ccoun in data['client_country'][start:start+window]:
         ccounCountWindow[ccoun]=ccounCountWindow.get(ccoun,0.0)+1.0
     ccounCountLRU=ccounCountWindow.copy()
-    for i in range(0,window):
-        ccounCountLRU[data['client_country'][i]]=ccounCountLRU[data['client_country'][i]]-recent[i]
+    for i in range(start,start+window):
+        ccounCountLRU[data['client_country'][i]]=ccounCountLRU[data['client_country'][i]]-recent[i-start]
     ccounLRUlen=len(ccounCountLRU)
     ccounLRUlist=list(ccounCountLRU)
     sum=0
@@ -251,8 +252,8 @@ for start in range(0,length-window+1):
     for ccity in data['client_city'][start:start+window]:
         ccityCountWindow[ccity]=ccityCountWindow.get(ccity,0.0)+1.0
     ccityCountLRU=ccityCountWindow.copy()
-    for i in range(0,window):
-        ccityCountLRU[data['client_city'][i]]=ccityCountLRU[data['client_city'][i]]-recent[i]
+    for i in range(start,start+window):
+        ccityCountLRU[data['client_city'][i]]=ccityCountLRU[data['client_city'][i]]-recent[i-start]
     ccityLRUlen=len(ccityCountLRU)
     ccityLRUlist=list(ccityCountLRU)
     sum=0
@@ -282,8 +283,8 @@ for start in range(0,length-window+1):
     for cisp in data['client_isp'][start:start+window]:
         cispCountWindow[cisp]=cispCountWindow.get(cisp,0.0)+1.0
     cispCountLRU=cispCountWindow.copy()
-    for i in range(0,window):
-        cispCountLRU[data['client_isp'][i]]=cispCountLRU[data['client_isp'][i]]-recent[i]
+    for i in range(start,start+window):
+        cispCountLRU[data['client_isp'][i]]=cispCountLRU[data['client_isp'][i]]-recent[i-start]
     cispLRUlen=len(cispCountLRU)
     cispLRUlist=list(cispCountLRU)
     sum=0
@@ -319,8 +320,8 @@ for start in range(0,length-window+1):
     for co in data['client_organization'][start:start+window]:
         coCountWindow[co]=coCountWindow.get(co,0.0)+1.0
     coCountLRU=coCountWindow.copy()
-    for i in range(0,window):
-        coCountLRU[data['client_organization'][i]]=coCountLRU[data['client_organization'][i]]-recent[i]
+    for i in range(start,start+window):
+        coCountLRU[data['client_organization'][i]]=coCountLRU[data['client_organization'][i]]-recent[i-start]
     coLRUlen=len(coCountLRU)
     coLRUlist=list(coCountLRU)
     sum=0
