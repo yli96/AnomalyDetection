@@ -19,7 +19,8 @@ import matplotlib.pyplot as plt
 from sklearn.ensemble import IsolationForest
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-data = pd.read_csv('individualAnomaly.csv')
+import time
+data = pd.read_csv('login.csv')
 
 
 '''
@@ -29,7 +30,7 @@ data = pd.read_csv('loginAnomaly.csv')
 length=len(data)
 col=10
 mu,sigma=0,0.00001
-predict=np.zeros((length,col))
+predict=np.zeros((length,col))   
 category=np.zeros((length,col))
 sa=np.random.normal(mu,sigma,length)
 '''def loginStatusCheck(self):'''
@@ -180,14 +181,20 @@ for i in range(0,length):
         if data['client_organization'][i]==cotmp[j]:
             sa=np.random.normal(mu,sigma)
             category[i][9]=j+1+sa 
-
+start = time.clock()
 clf = IsolationForest(max_samples=length, random_state=rng)
 clf.fit(category)
 y_pred = clf.predict(category)
+
 b=clf.decision_function(category)
+elapsed = (time.clock() - start)
+
+y_pred = clf.predict(category)
+
 for i in range(0,length):
     if b[i]<-0.1:
         print 'Anomaly Detected at:', i
+print("Time used:",elapsed)
 
 '''
 length=len(data)

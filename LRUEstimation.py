@@ -20,7 +20,7 @@ mu,sigma=0,0.00001
 data = pd.read_csv('individualAnomaly2.csv')
 length=len(data)
 col=10
-window=100
+window=500
 predict=np.zeros((length,col))
 recent=np.zeros(window)
 predictLRU=np.zeros((length-window+1,col))
@@ -331,3 +331,6 @@ for start in range(0,length-window+1):
         predictLRU[start][9]=coCountLRU[data['client_organization'][start+window-1]]/sum
     else:
         predictLRU[start][9]=0
+for i in range(0, len(predictLRU)):
+    if predictLRU[i][5]<0.01:
+        print 'Anomaly Detected at:', i+499

@@ -11,6 +11,7 @@ import sys
 import os
 import csv
 import math
+import time
 import random
 import scipy as sp
 import pandas as pd
@@ -25,7 +26,7 @@ col=16
 rng = np.random.RandomState(42)
 
 '''np.random.seed(42)'''
-mu,sigma=0,0.00001
+mu,sigma=0,0.0001
 sa=np.random.normal(mu,sigma,length)
 sb=np.random.normal(mu,sigma,length)
 # Generate train data
@@ -40,13 +41,16 @@ for i in range(0,length):
         X[i][1]=200 
 X[:,0]=X[:,0]+sa
 X[:,1]=X[:,1]+sb
+start = time.clock()
 clf = IsolationForest(max_samples=length, random_state=rng)
 clf.fit(X)
-y_pred = clf.predict(X)
 b=clf.decision_function(X)
+elapsed = (time.clock() - start)
 
+y_pred = clf.predict(X)
 
 for i in range(0,length):
-    if b[i]<-0.1:
+    if b[i]<-0.2:
         print 'Anomaly Detected at:', i
 a=np.arange(length)
+print("Time used:",elapsed)
